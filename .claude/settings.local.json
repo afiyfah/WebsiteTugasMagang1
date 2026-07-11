@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(timeout 55 npx next dev)",
+      "Bash(curl -s -o /dev/null -w \"home:%{http_code}\\\\n\" http://localhost:3000)",
+      "Read(//tmp/**)",
+      "Bash(timeout 60 npx next dev)",
+      "Bash(curl -s http://localhost:3000)"
+    ]
+  }
+}

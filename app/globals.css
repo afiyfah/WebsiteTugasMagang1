@@ -1,0 +1,579 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens                                                      */
+/* ------------------------------------------------------------------ */
+:root {
+  --bg: #08080a;
+  --bg-soft: #0e0e12;
+  --bg-card: #101014;
+  --ink: #f3f3ee;
+  --ink-dim: #83838e;
+  --ink-faint: #4a4a52;
+
+  --accent: #c8f45f;        /* lime */
+  --accent-soft: rgba(200, 244, 95, 0.14);
+  --violet: #b6a4ff;
+  --line: rgba(243, 243, 238, 0.08);
+  --line-strong: rgba(243, 243, 238, 0.16);
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--accent);
+  color: #0a0a0a;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Ambient background (grid + drifting glows) — sits behind the canvas */
+/* ------------------------------------------------------------------ */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ambient::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background-image: linear-gradient(
+      to right,
+      rgba(243, 243, 238, 0.04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(243, 243, 238, 0.04) 1px, transparent 1px);
+  background-size: 62px 62px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 85% 75% at 55% 42%,
+    #000 25%,
+    transparent 82%
+  );
+  mask-image: radial-gradient(
+    ellipse 85% 75% at 55% 42%,
+    #000 25%,
+    transparent 82%
+  );
+}
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  will-change: transform;
+}
+.glow-a {
+  width: 44vw;
+  height: 44vw;
+  right: -6%;
+  top: -12%;
+  background: var(--accent);
+  opacity: 0.11;
+  animation: drift-a 20s ease-in-out infinite;
+}
+.glow-b {
+  width: 40vw;
+  height: 40vw;
+  left: -12%;
+  top: 40%;
+  background: var(--violet);
+  opacity: 0.1;
+  animation: drift-b 26s ease-in-out infinite;
+}
+.glow-c {
+  width: 30vw;
+  height: 30vw;
+  left: 40%;
+  bottom: -18%;
+  background: #4a72ff;
+  opacity: 0.08;
+  animation: drift-a 30s ease-in-out infinite reverse;
+}
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-4%, 6%) scale(1.12);
+  }
+}
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(6%, -5%) scale(1.1);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Grain + vignette overlay                                           */
+/* ------------------------------------------------------------------ */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 55;
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 40%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Typographic helpers                                                */
+/* ------------------------------------------------------------------ */
+.eyebrow {
+  font-family: var(--font-mono);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 1.6rem;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+}
+
+.ghost-word {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Nav underline                                                      */
+/* ------------------------------------------------------------------ */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 1px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scrollbar                                                          */
+/* ------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ------------------------------------------------------------------ */
+/*  About HUD bubbles                                                  */
+/* ------------------------------------------------------------------ */
+.bubble {
+  position: absolute;
+  padding: 9px 15px 9px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(14, 14, 18, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}
+.bubble .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 9px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+.bubble.violet .dot {
+  background: var(--violet);
+  box-shadow: 0 0 10px var(--violet);
+}
+.bubble.amber .dot {
+  background: #ffcf6b;
+  box-shadow: 0 0 10px #ffcf6b;
+}
+
+/* larger glass HUD card (holds a label + content, wraps) */
+.hud {
+  position: absolute;
+  width: max-content;
+  max-width: 264px;
+  padding: 15px 17px;
+  border-radius: 16px;
+  border: 1px solid var(--line-strong);
+  background: rgba(14, 14, 18, 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 12px 34px rgba(0, 0, 0, 0.45);
+  z-index: 20;
+}
+.hud-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 9px;
+}
+.hud-head .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+.hud.violet .hud-head .dot {
+  background: var(--violet);
+  box-shadow: 0 0 10px var(--violet);
+}
+.hud.amber .hud-head .dot {
+  background: #ffcf6b;
+  box-shadow: 0 0 10px #ffcf6b;
+}
+
+/* About bubbles start hidden; JS adds .show once their scroll threshold hits */
+.about-bubble {
+  opacity: 0;
+  transform: translateY(16px) scale(0.94);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.about-bubble.show {
+  opacity: 1;
+  transform: none;
+}
+
+/* scroll-progress HUD shown on the centered laptop screen */
+.about-screen {
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26vw;
+  max-width: 320px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 24;
+}
+.about-screen-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 6px;
+}
+.about-screen-num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  text-shadow: 0 0 26px rgba(200, 244, 95, 0.35);
+}
+.about-screen-track {
+  margin: 14px auto 0;
+  width: 78%;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(243, 243, 238, 0.12);
+  overflow: hidden;
+}
+.about-screen-fill {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Project cards + cursor spotlight                                   */
+/* ------------------------------------------------------------------ */
+.card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateY(var(--rx, 0deg)) rotateX(var(--ry, 0deg));
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    var(--accent-soft),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+.card:hover::before {
+  opacity: 1;
+}
+.card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(200, 244, 95, 0.06);
+}
+/* lift inner blocks toward the viewer for parallax depth on tilt */
+.card-depth {
+  transform: translateZ(38px);
+}
+.card > *:not(.card-depth) {
+  transform: translateZ(14px);
+}
+.card-thumb {
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(200, 244, 95, 0.12), transparent 55%),
+    linear-gradient(135deg, #14141a, #0c0c10);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Marquee                                                            */
+/* ------------------------------------------------------------------ */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Misc                                                               */
+/* ------------------------------------------------------------------ */
+.side-label {
+  writing-mode: vertical-rl;
+  letter-spacing: 0.3em;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Contact background effects                                         */
+/* ------------------------------------------------------------------ */
+.contact-fx {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.contact-fx::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      to right,
+      rgba(243, 243, 238, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(243, 243, 238, 0.035) 1px, transparent 1px);
+  background-size: 58px 58px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 80% at 30% 30%,
+    #000 10%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 80% at 30% 30%,
+    #000 10%,
+    transparent 75%
+  );
+}
+.contact-glow-a {
+  width: 42vw;
+  height: 42vw;
+  left: -8%;
+  top: 4%;
+  background: var(--accent);
+  opacity: 0.09;
+  animation: drift-a 22s ease-in-out infinite;
+}
+.contact-glow-b {
+  width: 34vw;
+  height: 34vw;
+  right: -6%;
+  bottom: -14%;
+  background: var(--violet);
+  opacity: 0.09;
+  animation: drift-b 26s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Responsive: phones / narrow portrait                              */
+/* ------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .hud {
+    max-width: 42vw;
+    padding: 9px 11px;
+  }
+  .hud-head {
+    font-size: 0.52rem;
+    letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
+  .about-screen {
+    width: 54vw;
+    max-width: none;
+  }
+  .about-screen-num {
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+  /* clear of the centered laptop: short cards up top, the paragraph at bottom */
+  .hud-1 {
+    top: 19% !important;
+    left: 4% !important;
+    right: auto !important;
+  }
+  .hud-3 {
+    top: 19% !important;
+    right: 4% !important;
+    left: auto !important;
+  }
+  .hud-2 {
+    top: auto !important;
+    bottom: 6% !important;
+    left: 4% !important;
+    right: auto !important;
+    max-width: 62vw;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Floating tech logos (subtle background texture)                    */
+/* ------------------------------------------------------------------ */
+.flogo {
+  position: absolute;
+  display: block;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.55));
+  animation-name: flogo-3d;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+.flogo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* small floating icons with a gentle 3D wobble + twinkle */
+@keyframes flogo-3d {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: perspective(600px) rotateY(-38deg) rotateX(10deg) translateY(0);
+  }
+  50% {
+    opacity: 0.34;
+    transform: perspective(600px) rotateY(38deg) rotateX(-8deg) translateY(-9px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .flogo {
+    animation: none;
+  }
+}
