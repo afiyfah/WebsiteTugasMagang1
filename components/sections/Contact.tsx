@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import FloatingLogos from "@/components/FloatingLogos";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,10 +39,6 @@ export default function Contact() {
         <span className="glow contact-glow-a" />
         <span className="glow contact-glow-b" />
       </div>
-      <FloatingLogos
-        variant="contact"
-        className="absolute inset-0 -z-10 overflow-hidden"
-      />
 
       <p className="eyebrow mb-8">Get in touch</p>
 

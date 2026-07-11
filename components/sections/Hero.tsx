@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import FloatingLogos from "@/components/FloatingLogos";
 
 const SKILLS = [
   "React",
@@ -52,12 +51,6 @@ export default function Hero() {
       ref={root}
       className="relative h-screen w-full flex items-center px-6 md:px-16"
     >
-      {/* subtle floating tech logos behind the laptop */}
-      <FloatingLogos
-        variant="hero"
-        className="absolute inset-0 z-[5] overflow-hidden"
-      />
-
       {/* left rotated edge label */}
       <div className="hero-edge side-label hidden md:flex absolute left-5 top-1/2 -translate-y-1/2 items-center gap-4 font-mono text-[0.62rem] tracking-[0.3em] uppercase text-[var(--ink-faint)]">
         <span>Portfolio — 2026</span>

@@ -50,7 +50,7 @@ export default function Navbar() {
           <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
         </span>
         <span className="font-mono text-[0.66rem] sm:text-[0.78rem] tracking-[0.14em] sm:tracking-[0.2em] uppercase text-[var(--ink)]">
-          Portfolio
+          Portofolio
         </span>
         <sup className="hidden sm:inline font-mono text-[0.55rem] text-[var(--ink-dim)]">
           ®

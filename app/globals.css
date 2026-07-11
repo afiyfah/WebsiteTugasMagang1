@@ -540,40 +540,8 @@ body {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Floating tech logos (subtle background texture)                    */
-/* ------------------------------------------------------------------ */
-.flogo {
-  position: absolute;
-  display: block;
-  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.55));
-  animation-name: flogo-3d;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
-}
-.flogo svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-/* small floating icons with a gentle 3D wobble + twinkle */
-@keyframes flogo-3d {
-  0%,
-  100% {
-    opacity: 0.12;
-    transform: perspective(600px) rotateY(-38deg) rotateX(10deg) translateY(0);
-  }
-  50% {
-    opacity: 0.34;
-    transform: perspective(600px) rotateY(38deg) rotateX(-8deg) translateY(-9px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .marquee,
-  .flogo {
+  .marquee {
     animation: none;
   }
 }
