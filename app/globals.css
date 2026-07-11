@@ -499,6 +499,27 @@ body {
   opacity: 0.09;
   animation: drift-b 26s ease-in-out infinite;
 }
+/* twinkling dots (like the hero sparkles) */
+.cdot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #d4ef9a;
+  animation: cdot-twinkle 4s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+@keyframes cdot-twinkle {
+  0%,
+  100% {
+    opacity: 0.07;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Responsive: phones / narrow portrait                              */
@@ -540,8 +561,59 @@ body {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Floating glowing tech icons                                        */
+/* ------------------------------------------------------------------ */
+.flogo {
+  position: absolute;
+  display: block;
+  color: #d4ef9a; /* one theme — light lime, on-brand */
+  transform-style: preserve-3d;
+  animation-name: flogo-fly3d;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity, filter;
+}
+.flogo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* small 3D token: orbits its anchor while spinning in 3D, with a lime glow */
+@keyframes flogo-fly3d {
+  0% {
+    transform: translate(11px, 0) perspective(520px) rotateY(0deg) rotateX(6deg);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 9px rgba(200, 244, 95, 0.55));
+  }
+  25% {
+    transform: translate(0, 11px) perspective(520px) rotateY(90deg) rotateX(-5deg);
+    opacity: 0.3;
+    filter: drop-shadow(0 0 5px rgba(200, 244, 95, 0.4));
+  }
+  50% {
+    transform: translate(-11px, 0) perspective(520px) rotateY(180deg) rotateX(6deg);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 12px rgba(200, 244, 95, 0.55));
+  }
+  75% {
+    transform: translate(0, -11px) perspective(520px) rotateY(270deg) rotateX(-5deg);
+    opacity: 0.3;
+    filter: drop-shadow(0 0 5px rgba(200, 244, 95, 0.4));
+  }
+  100% {
+    transform: translate(11px, 0) perspective(520px) rotateY(360deg) rotateX(6deg);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 9px rgba(200, 244, 95, 0.55));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee {
     animation: none;
+  }
+  .flogo {
+    animation: none;
+    opacity: 0.75;
   }
 }

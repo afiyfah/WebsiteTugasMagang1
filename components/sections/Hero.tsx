@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import FloatingLogos from "@/components/FloatingLogos";
 
 const SKILLS = [
   "React",
@@ -51,11 +52,13 @@ export default function Hero() {
       ref={root}
       className="relative h-screen w-full flex items-center px-6 md:px-16"
     >
-      {/* left rotated edge label */}
-      <div className="hero-edge side-label hidden md:flex absolute left-5 top-1/2 -translate-y-1/2 items-center gap-4 font-mono text-[0.62rem] tracking-[0.3em] uppercase text-[var(--ink-faint)]">
-        <span>Portfolio — 2026</span>
-        <span className="h-16 w-px bg-[var(--line-strong)]" />
-      </div>
+      {/* glowing tech icons beside the laptop (above the canvas so all 5 show) */}
+      <FloatingLogos
+        variant="hero"
+        className="absolute inset-0 z-[25] overflow-hidden"
+      />
+
+
 
       <div className="relative z-30 max-w-2xl pl-4">
         <p className="hero-tag eyebrow mb-7">Available for freelance</p>
